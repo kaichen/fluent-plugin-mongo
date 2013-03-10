@@ -67,7 +67,7 @@ class MongoTailInput < Input
 
   def get_capped_collection
     begin
-      db = authenticate(Mongo::Connection.new(@host, @port).db(@database))
+      db = authenticate(Mongo::MongoClient.new(@host, @port).db(@database))
       raise ConfigError, "'#{@database}.#{@collection}' not found: node = #{@host}:#{@port}" unless db.collection_names.include?(@collection)
       collection = db.collection(@collection)
       raise ConfigError, "'#{@database}.#{@collection}' is not capped: node = #{@host}:#{@port}" unless [1, true].include?(collection.stats['capped']) # older version(2.0.x or earlier) returns 1

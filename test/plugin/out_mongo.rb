@@ -198,7 +198,7 @@ class MongoReplOutputTest < MongoOutputTest
   end
 
   def create_driver(conf = default_config)
-    @db = Mongo::ReplSetConnection.new(build_seeds(3), :name => @rs.name).db(MONGO_DB_DB)
+    @db = Mongo::MongoReplicaSetClient.new(build_seeds(3), :name => @rs.name).db(MONGO_DB_DB)
     Fluent::Test::BufferedOutputTestDriver.new(Fluent::MongoOutputReplset).configure(conf)
   end
 

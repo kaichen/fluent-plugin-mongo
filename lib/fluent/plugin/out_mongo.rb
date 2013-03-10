@@ -196,7 +196,7 @@ class MongoOutput < BufferedOutput
   end
 
   def get_connection
-    db = Mongo::Connection.new(@host, @port, @connection_options).db(@database)
+    db = Mongo::MongoClient.new(@host, @port, @connection_options).db(@database)
     authenticate(db)
   end
 
