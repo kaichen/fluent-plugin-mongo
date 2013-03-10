@@ -175,12 +175,10 @@ class MongoReplOutputTest < MongoOutputTest
   def setup
     Fluent::Test.setup
     require 'fluent/plugin/out_mongo_replset'
-
-    ensure_rs
   end
 
   def teardown
-    @rs.restart_killed_nodes
+    shared_repl_set.restart_killed_nodes
     if defined?(@db) && @db
       @db.collection(collection_name).drop
       @db.connection.close
@@ -198,7 +196,7 @@ class MongoReplOutputTest < MongoOutputTest
   end
 
   def create_driver(conf = default_config)
-    @db = Mongo::MongoReplicaSetClient.new(build_seeds(3), :name => @rs.name).db(MONGO_DB_DB)
+    @db = Mongo::MongoReplicaSetClient.new(build_seeds(3), :name => shared_repl_set.name).db(MONGO_DB_DB)
     Fluent::Test::BufferedOutputTestDriver.new(Fluent::MongoOutputReplset).configure(conf)
   end
 

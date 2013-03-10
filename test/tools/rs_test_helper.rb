@@ -3,15 +3,12 @@ require 'test_helper'
 require 'tools/repl_set_manager'
 
 class Test::Unit::TestCase
-  # Ensure replica set is available as an instance variable and that
-  # a new set is spun up for each TestCase class
-  def ensure_rs
-    unless defined?(@@current_class) and @@current_class == self.class
-      @@current_class = self.class 
-      @@rs = ReplSetManager.new
-      @@rs.start_set
-    end
-    @rs = @@rs
+  def shared_repl_set
+    @@rs ||= begin
+              rs = ReplSetManager.new
+              rs.start_set
+              rs
+             end
   end
 
   # Generic code for rescuing connection failures and retrying operations.
@@ -32,7 +29,7 @@ class Test::Unit::TestCase
   def build_seeds(num_hosts)
     seeds = []
     num_hosts.times do |n|
-      seeds << "#{@rs.host}:#{@rs.ports[n]}"
+      seeds << "#{shared_repl_set.host}:#{shared_repl_set.ports[n]}"
     end
     seeds
   end

@@ -13,6 +13,7 @@ class ReplSetManager
 
   def initialize(opts={})
     @mongod     = ENV['mongod'] || 'mongod'
+    @mongo      = ENV['mongo'] || 'mongo'
     @start_port = opts[:start_port] || 30000
     @ports      = []
     @name       = opts[:name] || 'replica-set-foo'
@@ -39,7 +40,7 @@ class ReplSetManager
     end
 
     @mongods   = {}
-    version_string = `#{@mongod} --version`
+    version_string = `#{@mongo} --version`
     version_string =~ /(\d\.\d\.\d)/
     @version = $1.split(".").map {|d| d.to_i }
   end
