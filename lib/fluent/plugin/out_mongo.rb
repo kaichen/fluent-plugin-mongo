@@ -63,7 +63,7 @@ class MongoOutput < BufferedOutput
       @collection_options[:max] = Config.size_value(conf['capped_max']) if conf.has_key?('capped_max')
     end
 
-    @connection_options[:safe] = @safe
+    @connection_options[:w] = @safe ? 1 : 0
 
     # MongoDB uses BSON's Date for time.
     def @timef.format_nocache(time)
